@@ -21,6 +21,5 @@ public final class Constants {
         public static final int kdriveMotorLeft2 = 4;
         public static final int kintakeMotor = 5;
         public static final int karmMotor = 6;
-        public static final int kclimberMotor = 7;
     }
 }

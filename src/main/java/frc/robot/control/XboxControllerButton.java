@@ -7,7 +7,7 @@
 
 package frc.robot.control;
 
-
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Button;
 
 /**
@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 public class XboxControllerButton extends Button
 {
 
-    private final XboxController m_joystick;
+    private final XboxControllerEE m_joystick;
     private final int m_buttonNumber;
 
     /**
@@ -25,7 +25,7 @@ public class XboxControllerButton extends Button
      * @param joystick The XboxController object that has that button
      * @param kb   The button number (see {@link Button})
      */
-    public XboxControllerButton(XboxController joystick, frc.robot.control.XboxController.Button kb)
+    public XboxControllerButton(XboxControllerEE joystick, XboxController.Button kb)
     {
         m_joystick = joystick;
         m_buttonNumber = kb.value;

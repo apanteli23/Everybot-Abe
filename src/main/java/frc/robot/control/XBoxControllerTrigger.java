@@ -7,6 +7,7 @@
 
 package frc.robot.control;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -15,8 +16,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class XBoxControllerTrigger extends Trigger
 {
 
-    private final XboxController m_controller;
-    private final XboxController.Hand m_hand;
+    private final XboxControllerEE m_controller;
+    private final int m_axis;
 
     /**
      * Create a DPad object for triggering commands.
@@ -24,20 +25,20 @@ public class XBoxControllerTrigger extends Trigger
      * @param ctrlr   The XboxController object that has that DPad
      * @param dpadArm The DPad arm
      */
-    public XBoxControllerTrigger(XboxController ctrlr, XboxController.Hand hand)
+    public XBoxControllerTrigger(XboxControllerEE ctrlr, XboxController.Axis trigger)
     {
         m_controller = ctrlr;
-        m_hand = hand;
+        m_axis = trigger.value;
     }
 
     /**
-     * Gets the state of the DPad arm.
+     * Gets the state of the specified Trigger axis.
      *
-     * @return The state of the DPad arm (true = Pressed; false = Unpressed)
+     * @return The state of the Trigger (true = Pressed (past 0.2); false = Unpressed (less than 0.2))
      */
     public boolean get()
     {
-        return (m_controller.getTriggerAxis(m_hand) > 0.2);
+        return (m_controller.getRawAxis(m_axis) > 0.2);
     }
 
 	

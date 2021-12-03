@@ -5,13 +5,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.control.XboxController;
 import frc.robot.control.XboxControllerButton;
-import frc.robot.subsystems.ClimberSubsystem.Climb;
-import frc.robot.subsystems.ClimberSubsystem.ClimberSubsystem;
+import frc.robot.control.XboxControllerEE;
 import frc.robot.subsystems.DrivebaseSubsystem.ArcadeDrive;
 import frc.robot.subsystems.DrivebaseSubsystem.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem.DriveIntake;
+import frc.robot.subsystems.IntakeSubsystem.IntakeSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,11 +22,10 @@ import frc.robot.subsystems.DrivebaseSubsystem.DriveSubsystem;
  */
 public class RobotContainer {
 
-  private final ClimberSubsystem m_climber = new ClimberSubsystem();
   private final DriveSubsystem m_drive = new DriveSubsystem();
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
 
-  public static XboxController m_driverController = new XboxController(0);
-  public static XboxController m_operatorController = new XboxController(1);
+  public static XboxControllerEE m_controller = new XboxControllerEE(0);
 
   // The robot's subsystems and commands are defined here...
  
@@ -37,8 +37,8 @@ public class RobotContainer {
 
     m_drive.setDefaultCommand(
         new ArcadeDrive(m_drive, 
-                        () -> m_driverController.getLeftY(), 
-                        () -> m_driverController.getRightX()));
+                        () -> m_controller.getLeftY(), 
+                        () -> m_controller.getRightX()));
     }
 
   /**
@@ -48,14 +48,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
+    new XboxControllerButton(m_controller, XboxController.Button.kA).whenPressed(new DriveIntake(m_intake, 0.5));
 
-    new XboxControllerButton(m_operatorController, XboxController.Button.kA)
-        .whenHeld(new Climb(m_climber, 0.5));
-
-    new XboxControllerButton(m_operatorController, XboxController.Button.kY)
-        .whenHeld(new Climb(m_climber, -0.5));
-
+    new XboxControllerButton(m_controller, XboxController.Button.kY).whenPressed(new DriveIntake(m_intake, -0.5));
   }
 
   /**
