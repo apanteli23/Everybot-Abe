@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.control.XboxControllerButton;
 import frc.robot.control.XboxControllerEE;
+import frc.robot.subsystems.ArmSubsystem.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem.DriveArm;
 import frc.robot.subsystems.DrivebaseSubsystem.ArcadeDrive;
 import frc.robot.subsystems.DrivebaseSubsystem.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem.DriveIntake;
@@ -24,6 +26,7 @@ public class RobotContainer {
 
   private final DriveSubsystem m_drive = new DriveSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  private final ArmSubsystem m_arm = new ArmSubsystem();
 
   public static XboxControllerEE m_controller = new XboxControllerEE(0);
 
@@ -36,10 +39,15 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_drive.setDefaultCommand(
-        new ArcadeDrive(m_drive, 
-                        () -> m_controller.getLeftY(), 
-                        () -> m_controller.getRightX()));
-    }
+      new ArcadeDrive(m_drive, 
+                      () -> m_controller.getLeftY(), 
+                      () -> m_controller.getRightX()));
+
+    m_arm.setDefaultCommand( 
+	    new DriveArm(m_arm,
+                  () -> m_controller.getRightTriggerAxis(),
+                  () -> m_controller.getLeftTriggerAxis()));
+  }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
