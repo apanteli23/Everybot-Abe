@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems.DrivebaseSubsystem;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -14,10 +18,10 @@ import frc.robot.Constants;
 public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
  
-  private final MotorController m_rightDrive1 = new Talon(Constants.CanConstants.kdriveMotorRight1);
-  private final MotorController m_rightDrive2 = new Talon(Constants.CanConstants.kdriveMotorRight2);
-  private final MotorController m_leftDrive1 = new Talon(Constants.CanConstants.kdriveMotorLeft1);
-  private final MotorController m_leftDrive2 = new Talon(Constants.CanConstants.kdriveMotorLeft2);
+  private final WPI_TalonSRX m_rightDrive1 = new WPI_TalonSRX(Constants.CanConstants.kdriveMotorRight1);
+  private final WPI_TalonSRX m_rightDrive2 = new WPI_TalonSRX(Constants.CanConstants.kdriveMotorRight2);
+  private final WPI_TalonSRX m_leftDrive1 = new WPI_TalonSRX(Constants.CanConstants.kdriveMotorLeft1);
+  private final WPI_TalonSRX m_leftDrive2 = new WPI_TalonSRX(Constants.CanConstants.kdriveMotorLeft2);
 
   private final DifferentialDrive m_drive;
 
@@ -30,6 +34,12 @@ public class DriveSubsystem extends SubsystemBase {
     MotorControllerGroup rightControllers = new MotorControllerGroup(m_rightDrive1, m_rightDrive2);
     
     m_drive = new DifferentialDrive(leftControllers, rightControllers);
+
+    m_leftDrive1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    m_leftDrive2.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    m_rightDrive1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    m_rightDrive2.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+
 
   }
 
@@ -44,7 +54,29 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.arcadeDrive(fwd, rot);
   }
 
+  public double getAvgEncoder(){
+    return (m_leftDrive1.getSelectedSensorPosition() + m_rightDrive1.getSelectedSensorPosition() + m_rightDrive2.getSelectedSensorPosition() + m_leftDrive2.getSelectedSensorPosition())/4;
+  }
 
+  public void setDrive(double position){
+    m_rightDrive1.set(ControlMode.Position, position);
+    m_rightDrive2.set(ControlMode.Position, position);
+    m_leftDrive1.set(ControlMode.Position, position);
+    m_leftDrive2.set(ControlMode.Position, position);
+  }
 
+  public void pivotDriveRight(double velocity){
+    m_rightDrive1.set(ControlMode.Velocity, -velocity);
+    m_rightDrive2.set(ControlMode.Velocity, -velocity);
+    m_leftDrive1.set(ControlMode.Velocity, velocity);
+    m_leftDrive2.set(ControlMode.Velocity, velocity);
+  }
+
+  public void pivotDriveLeft(double velocity){
+    m_rightDrive1.set(ControlMode.Velocity, velocity);
+    m_rightDrive2.set(ControlMode.Velocity, velocity);
+    m_leftDrive1.set(ControlMode.Velocity, -velocity);
+    m_leftDrive2.set(ControlMode.Velocity, -velocity);
+  }
 
 }

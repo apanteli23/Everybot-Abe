@@ -5,15 +5,20 @@
 package frc.robot.subsystems.ArmSubsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CanConstants;
 
 public class ArmSubsystem extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
   private final TalonSRX m_arm = new TalonSRX(CanConstants.karmMotor);
-  public ArmSubsystem() {}
+
+  public ArmSubsystem() {
+    m_arm.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+  }
 
   @Override
   public void periodic() {
@@ -21,5 +26,16 @@ public class ArmSubsystem extends SubsystemBase {
   }
   public void driveArm(double speed){
     m_arm.set(ControlMode.PercentOutput, speed);
+  }
+
+  public double getEncoderValue(){
+    //gets encoder value in degrees
+    return m_arm.getSelectedSensorPosition()*(360/4096);
+  }
+  public void setArm(double position){
+    m_arm.set(ControlMode.Position, position);
+  }
+  public void encoderValueGraph(){
+    SmartDashboard.putNumber("encoder value", getEncoderValue());
   }
 }

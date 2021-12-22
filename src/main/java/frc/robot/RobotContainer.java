@@ -7,10 +7,15 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.control.XBoxControllerDPad;
 import frc.robot.control.XboxControllerButton;
 import frc.robot.control.XboxControllerEE;
 import frc.robot.subsystems.ArmSubsystem.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.DriveArm;
+import frc.robot.subsystems.ArmSubsystem.PIDFSetArm;
+import frc.robot.subsystems.ArmSubsystem.PIDSetArm;
+import frc.robot.subsystems.ArmSubsystem.PIDTMPSetArm;
 import frc.robot.subsystems.DrivebaseSubsystem.ArcadeDrive;
 import frc.robot.subsystems.DrivebaseSubsystem.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem.DriveIntake;
@@ -37,7 +42,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
+    
     m_drive.setDefaultCommand(
       new ArcadeDrive(m_drive, 
                       () -> m_controller.getLeftY(), 
@@ -59,6 +64,16 @@ public class RobotContainer {
     new XboxControllerButton(m_controller, XboxController.Button.kA).whenPressed(new DriveIntake(m_intake, 0.5));
 
     new XboxControllerButton(m_controller, XboxController.Button.kY).whenPressed(new DriveIntake(m_intake, -0.5));
+
+
+    new XBoxControllerDPad(m_controller, XboxControllerEE.DPad.kDPadUp).whenActive(new PIDSetArm (m_arm, ArmConstants.kStore));
+    new XBoxControllerDPad(m_controller, XboxControllerEE.DPad.kDPadDown).whenActive(new PIDSetArm (m_arm, ArmConstants.kIntake));
+
+    new XBoxControllerDPad(m_controller, XboxControllerEE.DPad.kDPadUp).whenActive(new PIDFSetArm (m_arm, ArmConstants.kStore));
+    new XBoxControllerDPad(m_controller, XboxControllerEE.DPad.kDPadDown).whenActive(new PIDFSetArm (m_arm, ArmConstants.kIntake));
+
+    new XBoxControllerDPad(m_controller, XboxControllerEE.DPad.kDPadUp).whenActive(new PIDTMPSetArm (m_arm, true));
+    new XBoxControllerDPad(m_controller, XboxControllerEE.DPad.kDPadDown).whenActive(new PIDTMPSetArm (m_arm, false));
   }
 
   /**

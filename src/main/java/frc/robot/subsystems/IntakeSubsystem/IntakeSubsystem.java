@@ -12,7 +12,7 @@ import frc.robot.Constants.CanConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
-  private final TalonSRX m_intake = new TalonSRX(CanConstants.karmMotor);
+  private final TalonSRX m_intake = new TalonSRX(CanConstants.kintakeMotor);
   public IntakeSubsystem() {
   }
 

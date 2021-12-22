@@ -22,4 +22,54 @@ public final class Constants {
         public static final int kintakeMotor = 5;
         public static final int karmMotor = 6;
     }
+    public static final class ArmConstants{
+        
+        //Arm Gains
+        public static final double kP = 0.0;
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
+        //max linear velocity of arm motor
+        public static final double kVelocity = 0.4;
+        //volts
+        public static double kS = 0.0;
+        public static double kCos = 0.0;
+        //volts * seconds^2 / radians
+        public static double kV = 0.0;
+        public static double kAcceleration;
+        //Encoder Value when intaking
+        public static double kIntake = 0.0;
+        //Encoder Value when stored
+        public static double kStore = 85.0;
+
+        /*
+        Tuning PID 
+        Increase kP until the motor oscillates around the setpoint
+        Increase kD until the graph stabilizes on or close to the setpoint without oscillating 
+
+        Calculating FeedForward
+        kS and kCos should have units of volts, 
+        kV should have units of volts * seconds / radians, 
+        */
+    }
+
+    public static final class DriveConstants{
+
+        public static final double kWheelCircumfrince = 0.5*Math.PI;
+        //Arm Gains
+        public static final double kP = 0.0;
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
+        //max linear velocity of arm motor
+        public static final double kVelocity = 0.4;
+        //volts
+        public static double kS = 0.0;
+        public static double kCos = 0.0;
+        //volts * seconds^2 / radians
+        public static double kV = 0.0;
+        public static double kAcceleration;
+        //Encoder Value when intaking
+        public static double kIntake = 0.0;
+        //Encoder Value when stored
+        public static double kStore = 85.0;
+    }
 }
